@@ -1,0 +1,81 @@
+.app {
+    text-align: center;
+}
+
+.logo {
+    animation: App-logo-spin infinite 10s linear;
+    height: 80px;
+}
+
+.header {
+    margin-top: 2em;
+    background-color: #f4f0e5;
+    height: 140px;
+    padding: 20px;
+    color: #6a2515;
+    margin: 0;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+}
+.title {
+    font-size: 1.5em;
+    letter-spacing: 0.2em;
+}
+
+main {
+    background-image: url("background-case.jpg");
+    background-size: 35% 100%;
+    min-height: 400px;
+}
+
+#search-bar {
+    position: relative;
+    top: 1em;
+    padding: 1em;
+    background-color: #f4f0e5;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
+#search-bar .input {
+    margin: 16px;
+    width: 12em;
+    height: 3em;
+    padding: 0.4em 0.4em 0.2em 0.2em;
+}
+
+label {
+    font-size: 0.7em;
+    position: relative;
+    left: 4em;
+    top: 1em;
+}
+/* @keyframes App-logo-spin {
+    0% {
+        transform: translateX(-100px) rotate(0deg);
+    }
+    5% {
+        transform: translateX(-80px) rotate(5deg);
+    }
+    40% {
+        transform: translateX(80px) rotate(160deg);
+    }
+
+    50% {
+        transform: translateX(100px) rotate(180deg);
+    }
+    60% {
+        transform: translateX(80px) rotate(185deg);
+    }
+    95% {
+        transform: translateX(-80px) rotate(350deg);
+    }
+
+    100% {
+        transform: translateX(-100px) rotate(360deg);
+    }
+} */
