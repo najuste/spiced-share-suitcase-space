@@ -82,10 +82,11 @@ export default class RegisterForm extends React.Component {
     }
 
     submitRegistration() {
+        console.log("Submitting registration:", this.state);
         axios
             .post("/register", this.state)
             .then(results => {
-                // console.log("Data from db", results.data);
+                console.log("Data from db", results);
                 if (results.data.success) {
                     //location.replace("/"); //back to main page
                 } else {
@@ -95,8 +96,8 @@ export default class RegisterForm extends React.Component {
                     console.log("Got error, ", results.data.errorMsg);
                 }
             })
-            .catch(error => {
-                console.log(error);
+            .catch(err => {
+                console.log(err);
             });
     }
 

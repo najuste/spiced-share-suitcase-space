@@ -1,3 +1,8 @@
+-- suitcase -- the db
+
+CREATE EXTENSION postgis;
+
+
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
@@ -31,6 +36,5 @@ CREATE TABLE trips_taken(
     id SERIAL PRIMARY KEY,
     trip_id INTEGER NOT NULL REFERENCES trips,
     user_id INTEGER NOT NULL REFERENCES users,
-    taken_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
+    taken_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
