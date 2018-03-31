@@ -3,10 +3,12 @@ import axios from "./../axios";
 import { Link } from "react-router-dom";
 import { FormErrors } from "./FormErrors";
 
-export default class LoginForm extends React.Component {
+export default class RegisterForm extends React.Component {
     constructor() {
         super();
         this.state = {
+            firstname: "",
+            lastname: "",
             email: "",
             password: "",
             formErrors: {
@@ -15,8 +17,7 @@ export default class LoginForm extends React.Component {
             },
             emailValid: false,
             passwordValid: false,
-            formValid: false,
-            errorMsg: false
+            formValid: false
         };
         this.handleChange = this.handleChange.bind(this);
     }
@@ -33,6 +34,7 @@ export default class LoginForm extends React.Component {
             }
         );
     }
+
     fieldsNotEmpty(name, value) {
         console.log("Validating fields", name, value);
         let formValidation = this.state.formErrors;
@@ -40,22 +42,29 @@ export default class LoginForm extends React.Component {
         let passwordValid = this.state.passwordValid;
 
         switch (name) {
+            case "firstname":
+                var valid = value.length >= 1;
+                formValidation.firstname = valid ? "" : "no name?";
+                break;
+            case "lastname":
+                valid = value.length >= 1;
+                formValidation.lastname = valid ? "" : "no surname?";
+                break;
             case "email":
                 emailValid = value.match(
-                    /^([\w.!#$%&'*+-=?^_`{|}~]+)@([\w-]+\.)+([\w]{2,})$/i
+                    /^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i
                 );
-                formValidation.email = emailValid ? "" : "invalid email";
+                formValidation.email = emailValid ? "" : " invalid email";
                 break;
             case "password":
                 passwordValid = value.length >= 6;
                 formValidation.password = passwordValid
                     ? ""
-                    : "password at least 6 char long";
+                    : "too short password";
                 break;
             default:
                 break;
         }
-
         this.setState(
             {
                 formErrors: formValidation,
@@ -72,13 +81,13 @@ export default class LoginForm extends React.Component {
         });
     }
 
-    submitLogin() {
+    submitRegistration() {
         axios
-            .post("/login", this.state)
+            .post("/register", this.state)
             .then(results => {
+                // console.log("Data from db", results.data);
                 if (results.data.success) {
-                    //location.replace("/");
-                    //NOT SURE HOW TO HANDLE THIS
+                    //location.replace("/"); //back to main page
                 } else {
                     this.setState({
                         errorMsg: results.data.errorMsg
@@ -92,12 +101,25 @@ export default class LoginForm extends React.Component {
     }
 
     render() {
-        const email = this.state.email; // eslint-disable-next-line
-        const password = this.state.password; // eslint-disable-next-line
+        const firstname = this.state.firstname;
+        const lastname = this.state.lastname;
+        const email = this.state.email;
+        const password = this.state.password;
         const msg = this.state.errorMsg;
-        // console.log(msg);
         return (
-            <div className="login-section section">
+            <div className="register-section section">
+                <input
+                    onChange={this.handleChange}
+                    name="firstname"
+                    type="text"
+                    placeholder="First Name"
+                />
+                <input
+                    onChange={this.handleChange}
+                    name="lastname"
+                    type="text"
+                    placeholder="Last Name"
+                />
                 <input
                     onChange={this.handleChange}
                     name="email"
@@ -116,21 +138,18 @@ export default class LoginForm extends React.Component {
                     disabled={!this.state.formValid}
                     onClick={e => {
                         e.preventDefault();
-                        this.submitLogin();
+                        this.submitRegistration();
                     }}
                 >
-                    Log in
+                    Register
                 </button>
                 {msg ? <p className="error">{msg}</p> : null}
-                <div className="validation-msg">
-                    {!this.state.formValid && (
-                        <FormErrors formErrors={this.state.formErrors} />
-                    )}
-                </div>
+                {!this.state.formValid && (
+                    <FormErrors formErrors={this.state.formErrors} />
+                )}
                 <p>
-                    Not registered yet?
-                    <br />
-                    <Link to="/register">Register!</Link>
+                    Already registered?<br />
+                    <Link to="/login">Log in!</Link>
                 </p>
             </div>
         );

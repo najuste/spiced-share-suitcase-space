@@ -6,6 +6,8 @@ import "./App.css";
 import logo from "./logo.svg";
 
 import LoginForm from "./registration/LoginForm";
+import RegisterForm from "./registration/RegisterForm";
+
 import SearchBar from "./components/SearchBar";
 import SearchResults from "./components/SearchResults";
 import ProfileLogo from "./loggedin/ProfileLogo";
@@ -62,6 +64,7 @@ class App extends Component {
                                 )}
                             />
                             <Route path="/login" component={LoginForm} />
+                            <Route path="/register" component={RegisterForm} />
                             <Route path="/profile" component={Profile} />
                         </main>
                     </div>
