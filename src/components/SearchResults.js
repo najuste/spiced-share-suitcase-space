@@ -54,6 +54,7 @@ class SearchResults extends React.Component {
 function mapStateToProps(state) {
     console.log("state in SEARCH RESULTS mapStateToProps", state);
     return {
+        user: state.user,
         suitcases: state.suitcases,
         errorMsg: state.errorMsg
     };

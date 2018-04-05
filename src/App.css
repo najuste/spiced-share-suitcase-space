@@ -67,14 +67,30 @@ a {
     height: 84px;
 }
 
-.btn-nav {
+.btn-nav,
+a.btn {
     padding: 16px;
     background: var(--blue);
     box-shadow: 0 0 5px;
     margin: 5px;
 }
-.btn-nav:hover {
+
+a.btn {
+    display: block;
+    width: 167px;
+}
+.btn-nav:hover a.btn:hover {
     box-shadow: 0 0 3px var(--brown);
+}
+
+.login-section .btn,
+.register-section .btn {
+    padding: 16px;
+    background: var(--blue);
+    box-shadow: 0 0 5px;
+    margin: 5px;
+    display: block;
+    width: 167px;
 }
 
 .user-profile {

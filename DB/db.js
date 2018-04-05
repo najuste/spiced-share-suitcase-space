@@ -128,13 +128,6 @@ exports.searchForSuitcase = function(
     );
 };
 
-// query for update trips status
-// exports.updateTripStatus = function(id, status) {
-//     return db.one(`UPDATE trips SET (status=$2) WHERE id=$1 RETURNING *`, [
-//         id,
-//         status
-//     ]);
-// };
 // query to update trips description?? // price?? // date ?? //
 exports.takeTrip = function(trip_id, user_id) {
     return db.one(
@@ -142,3 +135,12 @@ exports.takeTrip = function(trip_id, user_id) {
         [trip_id, user_id]
     );
 }; // after this automatically update the table trips, to set status to 1 (taken)
+
+exports.getUserSuitcase = function(user_id, limit) {
+    return db.any(
+        `SELECT * FROM trips
+        WHERE user_id = $1 OR reservedby_id = $1
+        ORDER BY created_at DESC LIMIT $2`,
+        [user_id, limit]
+    );
+};

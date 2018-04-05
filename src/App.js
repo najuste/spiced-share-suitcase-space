@@ -144,7 +144,7 @@ class App extends Component {
     }
 }
 const Menu = props => {
-    console.log("SHould show Menu");
+    console.log("Should show Menu");
     return (
         <div id="drop-down-menu">
             <Link to="/profile" onClick={props.toggleMenu}>

@@ -118,7 +118,9 @@ class LoginForm extends React.Component {
                 <p>
                     Not registered yet?
                     <br />
-                    <Link to="/register">Register!</Link>
+                    <Link className="btn" to="/register">
+                        Register!
+                    </Link>
                 </p>
             </div>
         );

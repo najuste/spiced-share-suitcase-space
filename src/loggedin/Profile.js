@@ -5,9 +5,14 @@ import ProfilePic from "./ProfilePic";
 import { ProfilePicUpload } from "./ProfilePicUpload";
 
 import { connect } from "react-redux";
-import { getLoggedInUser, uploadPic, editDesc } from "./../actions";
+import {
+    getLoggedInUser,
+    uploadPic,
+    editDesc,
+    getUserSuitcases
+} from "./../actions";
 
-let tripsOffered, tripsTaken;
+let suitcasesOffered, suitcasesTaken;
 
 class Profile extends React.Component {
     constructor(props) {
@@ -27,6 +32,7 @@ class Profile extends React.Component {
     }
     componentDidMount() {
         this.props.dispatch(getLoggedInUser());
+        this.props.dispatch(getUserSuitcases());
     }
 
     // --- subsection PIC;
@@ -62,8 +68,9 @@ class Profile extends React.Component {
     }
 
     render() {
+        console.log("PROFILE.js, props!!", this.props);
         const { user } = this.props;
-        console.log("Logging in PROFILE.js, props.user", this.props);
+
         return (
             <div className="section user-profile">
                 <div className="subsection pic">
@@ -126,11 +133,11 @@ class Profile extends React.Component {
                         </div>
                     )}
                 </div>
-                {tripsOffered && (
-                    <div className="subsection trips trips-offered">...</div>
+                {suitcasesOffered && (
+                    <div className="subsection trips suitcase-offered">...</div>
                 )}
-                {tripsTaken && (
-                    <div className="subsection trips trips-taken">...</div>
+                {suitcasesTaken && (
+                    <div className="subsection trips suitcase-taken">...</div>
                 )}
 
                 <div className="subsection reviews">
@@ -142,11 +149,32 @@ class Profile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log("state in MAP STATE TO PROPS in Profile", state);
+    // console.log("state in MAP STATE TO PROPS in Profile", state);
     return {
         user: state.user,
-        errorMsg: state.errorMsg
+        errorMsg: state.errorMsg,
+        suitcasesOffered:
+            state.userSuitcases &&
+            state.userSuitcases.filter(s => {
+                console.log(
+                    s.user_id,
+                    state.user.id,
+                    s.user_id !== state.user.id
+                );
+                return s.user_id !== state.user.id;
+            }),
+        suitcasesTaken:
+            state.userSuitcases &&
+            state.userSuitcases.filter(s => {
+                console.log(
+                    s.reservedby_id,
+                    state.user.id,
+                    s.reservedby_id !== state.user.id
+                );
+                return s.reservedby_id !== state.user.id;
+            })
     };
+    console.log("state in MAP STATE TO PROPS in Profile", state);
 }
 
 export default connect(mapStateToProps)(Profile);

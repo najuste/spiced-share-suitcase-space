@@ -316,6 +316,23 @@ app.post("/desc-submit", function(req, res) {
     }
 });
 
+//// TODO: It could be two queries, for share and for space so that limit works better
+app.get("/user-suitcase", function(req, res) {
+    let limitSuitcases = 10;
+    console.log("Results from /user-suitcase", req.session.loggedin.id);
+    return db
+        .getUserSuitcase(req.session.loggedin.id, limitSuitcases)
+        .then(results => {
+            console.log("Results from /user-suitcase", results);
+            res.json({
+                success: true,
+                id: req.session.loggedin.id,
+                results
+            });
+        })
+        .catch(err => console.log(err));
+});
+
 app.get("/search-suitcase", function(req, res) {
     console.log("Inside search-suitcase route", req.url);
     const urlParams = url.parse(req.url);

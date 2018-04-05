@@ -1,8 +1,5 @@
 export default function(state = {}, action) {
     if (action.type == "GET_USER") {
-        console.log("in reducer get_user:, action:", action);
-        console.log("in reducer get_user:, state:", state);
-
         return Object.assign({}, state, {
             user: action.user //action.users from actions
         });
@@ -12,14 +9,14 @@ export default function(state = {}, action) {
         action.type == "SET_REGISTER_SUCCESS" ||
         action.type == "SET_LOGIN_SUCCESS"
     ) {
-        console.log("Reached reducer in success", action);
+        // console.log("Reached reducer in success", action);
         return Object.assign({}, state, {
             user: action.user //action.users from actions
         });
     }
 
     if (action.type == "UPDATE_PIC") {
-        console.log("Reached reducer fileUpload with success", action);
+        // console.log("Reached reducer fileUpload with success", action);
         const user = Object.assign({}, state.user, {
             profilepic: action.pic
         });
@@ -29,7 +26,7 @@ export default function(state = {}, action) {
         };
     }
     if (action.type == "UPDATE_DESC") {
-        console.log("Reached reducer desc update with success", action);
+        // console.log("Reached reducer desc update with success", action);
         const user = Object.assign({}, state.user, {
             description: action.desc
         });
@@ -39,7 +36,7 @@ export default function(state = {}, action) {
         };
     }
     if (action.type == "SET_ERROR") {
-        console.log("Reached reducer with error", action);
+        // console.log("Reached reducer with error", action);
         return Object.assign({}, state, {
             errorMsg: action.errorMsg //action.users from actions
         });
@@ -57,6 +54,15 @@ export default function(state = {}, action) {
             suitcase: action.suitcase //action.users from actions
         });
     }
+
+    if (action.type == "USER_SUITCASES") {
+        console.log("Reached reducer to get user suitcases", action);
+
+        return Object.assign({}, state, {
+            userSuitcases: action.userSuitcases //action.users from actions
+        });
+    }
+
     if (action.type == "RESERVE_SUITCASE") {
         // console.log("Reached reducer to get specific suitcase", action);
         // console.log("Reached reducer to get specific suitcase, state", state);
@@ -70,8 +76,6 @@ export default function(state = {}, action) {
             })
         };
     }
-
-    console.log("IN REDUCER:", action);
 
     if (action.type == "SEARCH_SUITCASE_RESULTS") {
         console.log("Reached reducer searchForSuitcase", action);

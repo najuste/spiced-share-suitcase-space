@@ -17,6 +17,12 @@ class Suitcase extends React.Component {
             this
         );
     }
+    componentWillMount() {
+        console.log("Component will mount, the props Im getting", this.props);
+        if (!this.props.user) {
+            window.location.replace("/login");
+        }
+    }
 
     componentDidMount() {
         const id = this.props.match.params.id;
@@ -75,6 +81,7 @@ class Suitcase extends React.Component {
 function mapStateToProps(state) {
     console.log("state in SUITCASE mapStateToProps", state);
     return {
+        user: state.user,
         suitcase: state.suitcase,
         errorMsg: state.errorMsg,
         suitcases: state.suitcases
