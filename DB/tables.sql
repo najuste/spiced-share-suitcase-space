@@ -21,12 +21,15 @@ CREATE TABLE trips(
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users,
     place_a GEOGRAPHY(POINT,4326) NOT NULL,
+    place_a_name TEXT NOT NULL,
     place_b GEOGRAPHY(POINT,4326)NOT NULL,
+    place_b_name TEXT NOT NULL,
     trip_date DATE NOT NULL,
-    space VARCHAR(25) NOT NULL,
+    size VARCHAR(25) NOT NULL,
     price INTEGER,
     description TEXT,
-    status INTEGER NOT NULL,
+    status INTEGER,
+    reservedby_id INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

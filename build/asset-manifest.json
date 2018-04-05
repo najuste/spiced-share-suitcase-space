@@ -1,8 +1,10 @@
 {
-  "main.css": "static/css/main.5a1f4245.css",
-  "main.css.map": "static/css/main.5a1f4245.css.map",
-  "main.js": "static/js/main.49caffbf.js",
-  "main.js.map": "static/js/main.49caffbf.js.map",
-  "static/media/background-case.jpg": "static/media/background-case.6d0b7f9c.jpg",
-  "static/media/logo.svg": "static/media/logo.e8d18463.svg"
+  "main.css": "static/css/main.2af3f37a.css",
+  "main.css.map": "static/css/main.2af3f37a.css.map",
+  "main.js": "static/js/main.f3769cfe.js",
+  "main.js.map": "static/js/main.f3769cfe.js.map",
+  "static/media/default-profile-pic.svg": "static/media/default-profile-pic.60227c94.svg",
+  "static/media/logo.svg": "static/media/logo.e8d18463.svg",
+  "static/media/menu-caret-down.svg": "static/media/menu-caret-down.9cbcc982.svg",
+  "static/media/suitcases.jpg": "static/media/suitcases.0a9e96f2.jpg"
 }

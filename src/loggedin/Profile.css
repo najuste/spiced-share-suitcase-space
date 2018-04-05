@@ -5,5 +5,92 @@
     height: 80%;
     min-width: 450px;
     margin: auto;
-    background-color: rgba(244, 240, 229, 0.7);
+    background-color: rgba(250, 250, 250, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.subsection {
+    margin: 1em;
+    width: 100%;
+    padding: 1em;
+    background-color: var(--main);
+}
+
+.toggle-upload .profile-logo {
+    height: 200px;
+    width: 200px;
+}
+
+#suitcase-section img.userpic,
+.section img.userpic {
+    border: 7px solid var(--brown);
+    height: 200px;
+    width: 200px;
+}
+
+.toggle-upload {
+    height: 300px;
+}
+
+.toggle-upload:hover {
+    cursor: pointer;
+}
+
+#pic-uploader {
+    position: relative;
+    text-align: center;
+    background-color: rgba(43, 43, 43, 0.5);
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+}
+
+#pic-uploader #close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0 3px;
+    color: rgba(250, 250, 250, 0.6);
+}
+#pic-uploader #close:hover {
+    color: rgba(250, 250, 250, 0.8);
+    cursor: pointer;
+}
+
+/* #pic-uploader input {
+    margin: 5px;
+    font-size: 15px;
+    height: 20px;
+} */
+#pic-uploader input#file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+input#file + label {
+    padding: 5px 10px;
+    font-weight: 700;
+    height: 40px;
+    width: 80px;
+    border-radius: 20px;
+    /* font-size: 1em; */
+    /* display: inline-block; */
+}
+
+input#file:focus + label,
+input#file + label:hover {
+    cursor: pointer;
+    color: #0049ab;
+    box-shadow: 0 0 2px grey;
+}
+
+button.btn-upload {
+    position: relative;
+    top: 200px;
 }

@@ -1,9 +1,12 @@
 import React from "react";
-import axios from "./../axios";
+// import axios from "./../axios";
 import { Link } from "react-router-dom";
 import { FormErrors } from "./FormErrors";
 
-export default class RegisterForm extends React.Component {
+import { connect } from "react-redux";
+import { register } from "./../actions";
+
+class RegisterForm extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -82,23 +85,7 @@ export default class RegisterForm extends React.Component {
     }
 
     submitRegistration() {
-        console.log("Submitting registration:", this.state);
-        axios
-            .post("/register", this.state)
-            .then(results => {
-                console.log("Data from db", results);
-                if (results.data.success) {
-                    //location.replace("/"); //back to main page
-                } else {
-                    this.setState({
-                        errorMsg: results.data.errorMsg
-                    });
-                    console.log("Got error, ", results.data.errorMsg);
-                }
-            })
-            .catch(err => {
-                console.log(err);
-            });
+        this.props.dispatch(register(this.state));
     }
 
     render() {
@@ -106,7 +93,8 @@ export default class RegisterForm extends React.Component {
         const lastname = this.state.lastname;
         const email = this.state.email;
         const password = this.state.password;
-        const msg = this.state.errorMsg;
+
+        const msg = this.props.errorMsg;
         return (
             <div className="register-section section">
                 <input
@@ -156,3 +144,14 @@ export default class RegisterForm extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    console.log("state in MAP STATE TO PROPS", state);
+    if (state.errorMsg) {
+        return {
+            errorMsg: state.errorMsg
+        };
+    }
+}
+
+export default connect(mapStateToProps)(RegisterForm);

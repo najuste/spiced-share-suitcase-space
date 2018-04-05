@@ -1,9 +1,12 @@
 import React from "react";
-import axios from "./../axios";
+// import axios from "./../axios";
 import { Link } from "react-router-dom";
 import { FormErrors } from "./FormErrors";
 
-export default class LoginForm extends React.Component {
+import { connect } from "react-redux";
+import { login } from "./../actions";
+
+class LoginForm extends React.Component {
     constructor() {
         super();
         this.state = {
@@ -73,29 +76,14 @@ export default class LoginForm extends React.Component {
     }
 
     submitLogin() {
-        axios
-            .post("/login", this.state)
-            .then(results => {
-                if (results.data.success) {
-                    //location.replace("/");
-                    //NOT SURE HOW TO HANDLE THIS
-                } else {
-                    this.setState({
-                        errorMsg: results.data.errorMsg
-                    });
-                    console.log("Got error, ", results.data.errorMsg);
-                }
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        this.props.dispatch(login(this.state));
     }
 
     render() {
-        const email = this.state.email; // eslint-disable-next-line
-        const password = this.state.password; // eslint-disable-next-line
-        const msg = this.state.errorMsg;
-        // console.log(msg);
+        const email = this.state.email;
+        const password = this.state.password;
+        const msg = this.props.errorMsg;
+
         return (
             <div className="login-section section">
                 <input
@@ -136,3 +124,14 @@ export default class LoginForm extends React.Component {
         );
     }
 }
+
+function mapStateToProps(state) {
+    console.log("state in MAP STATE TO PROPS", state);
+    if (state.errorMsg) {
+        return {
+            errorMsg: state.errorMsg
+        };
+    }
+}
+
+export default connect(mapStateToProps)(LoginForm);
