@@ -121,9 +121,15 @@ export function reserveSuitcaseById(id) {
     });
 }
 
-export function searchForSuitcase({ place_a, place_b, trip_date, size }) {
+export function searchForSuitcase({
+    place_a,
+    place_b,
+    trip_date,
+    size,
+    search_radius
+}) {
     console.log("Reached actions, searchForSuitcase");
-    let url = `/search-suitcase?place_a=${place_a}&place_b=${place_b}&trip_date=${trip_date}&size=${size}`;
+    let url = `/search-suitcase?place_a=${place_a}&place_b=${place_b}&trip_date=${trip_date}&size=${size}&search_radius=${search_radius}`;
 
     return axios.get(url).then(function({ data }) {
         // console.log("Getting desc resp", data);

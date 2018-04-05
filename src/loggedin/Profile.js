@@ -69,7 +69,7 @@ class Profile extends React.Component {
 
     render() {
         console.log("PROFILE.js, props!!", this.props);
-        const { user } = this.props;
+        const { user, suitcasesTaken, suitcasesOffered } = this.props;
 
         return (
             <div className="section user-profile">
@@ -97,22 +97,25 @@ class Profile extends React.Component {
                 </div>
                 <div className="subsection desc">
                     {!this.state.showDescriptionEdit ? (
-                        <p id="desc-text">
-                            {this.props.user &&
-                                (user.description ? (
-                                    user.description
-                                ) : (
-                                    <a onClick={this.toggleDesc}>
-                                        You haven't shared anything with us yet
-                                    </a>
-                                ))}
+                        <div id="desc-text">
+                            <p>
+                                {this.props.user &&
+                                    (user.description ? (
+                                        user.description
+                                    ) : (
+                                        <a onClick={this.toggleDesc}>
+                                            You haven't shared anything with us
+                                            yet
+                                        </a>
+                                    ))}
+                            </p>
                             <button
-                                className="btn btn-edit"
+                                className="btn btn-upload"
                                 onClick={this.toggleDesc}
                             >
                                 Edit
                             </button>
-                        </p>
+                        </div>
                     ) : (
                         <div id="desc-edit">
                             <textarea
@@ -133,13 +136,53 @@ class Profile extends React.Component {
                         </div>
                     )}
                 </div>
-                {suitcasesOffered && (
-                    <div className="subsection trips suitcase-offered">...</div>
-                )}
-                {suitcasesTaken && (
-                    <div className="subsection trips suitcase-taken">...</div>
-                )}
+                <div className="subsection-trips">
+                    {suitcasesOffered && (
+                        <div className="trips suitcase-offered">
+                            <h3>Suitcases shared</h3>
+                            {suitcasesOffered.length &&
+                                suitcasesOffered.map(suitcase => {
+                                    //check if trip_date is already behind today
+                                    return (
+                                        <div className="suitcase">
+                                            <div className="from">
+                                                {suitcase.place_a_name}
+                                            </div>
+                                            <div className="to">
+                                                {suitcase.place_b_name}
+                                            </div>
+                                            <div className="date">
+                                                {suitcase.trip_date}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    )}
+                    {suitcasesTaken && (
+                        <div className="trips suitcase-taken">
+                            <h3>Suitcases taken</h3>
 
+                            {suitcasesTaken.length &&
+                                suitcasesTaken.map(suitcase => {
+                                    //check if trip_date is already behind today
+                                    return (
+                                        <div className="suitcase">
+                                            <div className="from">
+                                                {suitcase.place_a_name}
+                                            </div>
+                                            <div className="to">
+                                                {suitcase.place_b_name}
+                                            </div>
+                                            <div className="date">
+                                                {suitcase.trip_date}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                        </div>
+                    )}
+                </div>
                 <div className="subsection reviews">
                     Review block, that logged in user can leave? Sockets?
                 </div>
@@ -156,22 +199,12 @@ function mapStateToProps(state) {
         suitcasesOffered:
             state.userSuitcases &&
             state.userSuitcases.filter(s => {
-                console.log(
-                    s.user_id,
-                    state.user.id,
-                    s.user_id !== state.user.id
-                );
-                return s.user_id !== state.user.id;
+                return s.reservedby_id !== state.user.id;
             }),
         suitcasesTaken:
             state.userSuitcases &&
             state.userSuitcases.filter(s => {
-                console.log(
-                    s.reservedby_id,
-                    state.user.id,
-                    s.reservedby_id !== state.user.id
-                );
-                return s.reservedby_id !== state.user.id;
+                return s.user_id !== state.user.id;
             })
     };
     console.log("state in MAP STATE TO PROPS in Profile", state);

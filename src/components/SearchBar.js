@@ -18,30 +18,46 @@ class SearchBar extends React.Component {
         this.state = {
             place_a_name: "", //from
             place_b_name: "", //to
-            trip_date: "",
-            size: "small"
+            trip_date: date,
+            size: "small",
+            search_radius: 50000, //in meters
+            description: ""
         };
         this.onChangeFrom = place_a_name => this.setState({ place_a_name });
         this.onChangeTo = place_b_name => this.setState({ place_b_name });
-        this.onChangeDate = this.onChangeDate.bind(this);
+        this.onChangeInput = this.onChangeInput.bind(this);
+        this.onChangeSlider = this.onChangeSlider.bind(this);
         this.onChangeSize = this.onChangeSize.bind(this);
         this.searchForSuitcase = this.searchForSuitcase.bind(this);
         this.shareASuitcase = this.shareASuitcase.bind(this);
     }
-    onChangeDate(e) {
+    onChangeInput(e) {
         this.setState({
-            //[e.target.name]: e.target.value
-            trip_date: e.target.value
+            [e.target.name]: e.target.value
         });
     }
+
     onChangeSize() {
         let size = document.getElementById("size").value;
         this.setState({ size });
     }
+    onChangeSlider(e) {
+        //let search_radius_in_m = e.target.value * 1000;
+        //console.log(search_radius_in_m, e.target.value);
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    }
 
     searchForSuitcase() {
-        console.log("Button clicked");
-        const { place_a_name, place_b_name, trip_date, size } = this.state;
+        const {
+            place_a_name,
+            place_b_name,
+            trip_date,
+            size,
+            search_radius
+        } = this.state;
+        //let search_radius = searchradius * 1000;
         geoCode(place_a_name, place_b_name).then(results => {
             let place_a = `POINT(${results.resultsFrom.lat} ${
                 results.resultsFrom.lng
@@ -49,29 +65,39 @@ class SearchBar extends React.Component {
             let place_b = `POINT(${results.resultsTo.lat} ${
                 results.resultsTo.lng
             })`;
-            console.log(
-                "Dispatching a data to searchForSuitcase",
-                place_a,
-                place_b,
-                trip_date,
-                size
-            );
+
+            // console.log(
+            //     "Dispatching a data to searchForSuitcase",
+            //     place_a,
+            //     place_b,
+            //     trip_date,
+            //     size,
+            // search_radius
+
+            // );
             this.props.dispatch(
                 searchForSuitcase({
                     place_a,
                     place_b,
                     trip_date,
-                    size
+                    size,
+                    search_radius
                 })
             );
         });
     }
 
     shareASuitcase() {
-        console.log("Button clicked", this.state);
-        const { place_a_name, place_b_name, trip_date, size } = this.state;
+        // console.log("Button clicked", this.state);
+        const {
+            place_a_name,
+            place_b_name,
+            trip_date,
+            size,
+            description
+        } = this.state;
         geoCode(place_a_name, place_b_name).then(results => {
-            console.log("Inside shareASuitcase,", results);
+            // console.log("Inside shareASuitcase,", results);
             //'POINT(41.2 32.4)'
             let place_a = `POINT(${results.resultsFrom.lat} ${
                 results.resultsFrom.lng
@@ -79,15 +105,15 @@ class SearchBar extends React.Component {
             let place_b = `POINT(${results.resultsTo.lat} ${
                 results.resultsTo.lng
             })`;
-            console.log(
-                "Dispatching a data to shareASuitcase",
-                place_a,
-                place_a_name,
-                place_b,
-                place_b_name,
-                trip_date,
-                size
-            );
+            // console.log(
+            //     "Dispatching a data to shareASuitcase",
+            //     place_a,
+            //     place_a_name,
+            //     place_b,
+            //     place_b_name,
+            //     trip_date,
+            //     size
+            // );
             this.props.dispatch(
                 shareASuitcase({
                     place_a,
@@ -95,7 +121,8 @@ class SearchBar extends React.Component {
                     place_b,
                     place_b_name,
                     trip_date,
-                    size
+                    size,
+                    description
                 })
             );
         });
@@ -114,6 +141,7 @@ class SearchBar extends React.Component {
             placeholder: "To:"
         };
         const options = {
+            // TODO: check if vould be bounded just to CITIES ??? Or try with airports
             // location: new google.maps.LatLng(52.52, 13.409),
             // radius: 10000, //10 km
             // country: "de",
@@ -143,31 +171,24 @@ class SearchBar extends React.Component {
 
         return (
             <div id="search-bar">
-                <label htmlFor="placeA">From</label>
-
                 <PlacesAutocomplete
                     class="input placeA"
                     inputProps={inputPropsFrom}
                     options={options}
                     styles={myStyles}
                 />
-                <label htmlFor="placeB">To</label>
-
                 <PlacesAutocomplete
                     class="input placeB"
                     inputProps={inputPropsTo}
                     options={options}
                     styles={myStyles}
                 />
-                <label htmlFor="date">Dates</label>
                 <input
-                    onChange={this.onChangeDate}
+                    onChange={this.onChangeInput}
                     className="input date"
                     type="date"
                     name="trip_date"
                 />
-                <label htmlFor="size">Size</label>
-
                 <select
                     onChange={this.onChangeSize}
                     className="input size"
@@ -177,6 +198,26 @@ class SearchBar extends React.Component {
                     <option value="average">average</option>
                     <option value="big">big</option>
                 </select>
+                {this.props.path == "/share-suitcase" ? (
+                    <div>some extra stuff</div>
+                ) : (
+                    <div className="slider">
+                        <label htmlFor="search_radius">Search radius</label>
+                        <input
+                            onChange={this.onChangeSlider}
+                            type="range"
+                            min="10000"
+                            max="1000000"
+                            value={this.state.search_radius}
+                            step="10000"
+                            name="search_radius"
+                            id="search_radius"
+                        />
+                        <output name="value" htmlFor="search_radius">
+                            {this.state.search_radius / 1000} km
+                        </output>
+                    </div>
+                )}
                 {this.props.path == "/share-suitcase" ? (
                     <SearchShareButtons shareASuitcase={this.shareASuitcase} />
                 ) : (
@@ -188,6 +229,28 @@ class SearchBar extends React.Component {
         );
     }
 }
+// {this.props.path != "/share-suitcase" && (
+//
+//         <input onChange={this.onChangeInput} type="range" min="10" max="100"
+//             value="50" name="search_radius" id="search_radius">
+//
+// )}
+
+// {this.props.path == "/share-suitcase" && (
+//     <div id="desc-edit">
+//         <p> Please submit the description of your suitcase and place available</p>
+//         <textarea
+//             type="text"
+//             defaultValue={//TODO should get here the description from the state
+//                 this.state.description}/>
+//         <button
+//             type="submit"
+//             className="btn btn-submit"
+//             onClick={this.handleDescSubmit}>
+//             Update
+//         </button>
+//     </div>
+// )}
 
 async function geoCode(from, to) {
     const resultsFrom = geocodeByAddress(from).then(results =>

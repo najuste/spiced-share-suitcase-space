@@ -24,7 +24,7 @@ class SearchResults extends React.Component {
                                         to={"/suitcase/" + suitcase.id}
                                         key={i}
                                     >
-                                        <div className="suitcase {suitcase.id}">
+                                        <div className="suitcase">
                                             <div className="from">
                                                 {suitcase.place_a_name}
                                             </div>

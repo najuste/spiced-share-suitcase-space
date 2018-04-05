@@ -1,10 +1,11 @@
 {
-  "main.css": "static/css/main.2e60d158.css",
-  "main.css.map": "static/css/main.2e60d158.css.map",
-  "main.js": "static/js/main.e559e29a.js",
-  "main.js.map": "static/js/main.e559e29a.js.map",
+  "main.css": "static/css/main.a26115f7.css",
+  "main.css.map": "static/css/main.a26115f7.css.map",
+  "main.js": "static/js/main.eaa22e40.js",
+  "main.js.map": "static/js/main.eaa22e40.js.map",
   "static/media/default-profile-pic.svg": "static/media/default-profile-pic.60227c94.svg",
   "static/media/logo.svg": "static/media/logo.e8d18463.svg",
   "static/media/menu-caret-down.svg": "static/media/menu-caret-down.9cbcc982.svg",
+  "static/media/suitcase.svg": "static/media/suitcase.b4976623.svg",
   "static/media/suitcases.jpg": "static/media/suitcases.0a9e96f2.jpg"
 }

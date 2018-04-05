@@ -202,12 +202,20 @@ app.post("/login", function(req, res) {
 app.get("/user-data", function(req, res) {
     console.log("In /user-data route", req.session);
     if (req.session.loggedin) {
-        res.json({ user: req.session.loggedin });
+        return db.getDataByEmail(req.session.loggedin.email).then(user => {
+            if (user.profilepic) {
+                user.profilepic = config.s3Url + user.profilepic;
+            }
+            res.json({ user });
+        });
     } else {
         console.log("there is a problem, user is not logged in...");
         //testing purposes when cookies  are short term
         res.json({});
     }
+    return db.getDataByEmail().then(user => {
+        console.log(user);
+    });
 });
 
 app.get("/latest-suitcases", function(req, res) {
@@ -339,10 +347,17 @@ app.get("/search-suitcase", function(req, res) {
     const query = querystring.parse(urlParams.query);
     //querystring
     if (query) {
-        const { place_a, place_b, trip_date, size } = query;
+        const { place_a, place_b, trip_date, size, search_radius } = query;
         console.log("Checking query passed to db", query);
         return db
-            .searchForSuitcase(place_a, place_b, trip_date, size, 10000, 10000)
+            .searchForSuitcase(
+                place_a,
+                place_b,
+                trip_date,
+                size,
+                search_radius,
+                search_radius
+            )
             .then(results => {
                 console.log("Results from search-suitcase", results);
                 //results.trip_date = results.trip_date.toDateString();
