@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route, Link, Switch } from "react-router-dom";
 // import axios from "./axios";
 
 import "./App.css";
 
 import logo from "./img/logo.svg";
 import menuicon from "./img/menu-caret-down.svg";
+
+import Lost from "./Lost";
 
 import LoginForm from "./registration/LoginForm";
 import RegisterForm from "./registration/RegisterForm";
@@ -29,14 +31,12 @@ class App extends Component {
         this.toggleMenu = this.toggleMenu.bind(this);
     }
 
-    toggleMenu() {
-        this.setState({ showMenu: !this.state.showMenu });
-    }
-
     componentDidMount() {
         this.props.dispatch(getLoggedInUser());
     }
-
+    toggleMenu() {
+        this.setState({ showMenu: !this.state.showMenu });
+    }
     handleClick() {
         window.location.assign("/login");
     }
@@ -119,23 +119,16 @@ class App extends Component {
                                     </div>
                                 )}
                             />
+                            <Route path="/login" component={LoginForm} />
+                            <Route path="/register" component={RegisterForm} />
 
-                            <div>
-                                <Route path="/profile" component={Profile} />
-                                <Route path="/login" component={LoginForm} />
-                                <Route
-                                    path="/register"
-                                    component={RegisterForm}
-                                />
-                                <Route
-                                    path="/share-suitcase"
-                                    component={ShareASuitcase}
-                                />
-                                <Route
-                                    path="/suitcase/:id"
-                                    component={Suitcase}
-                                />
-                            </div>
+                            <Route path="/profile" component={Profile} />
+
+                            <Route
+                                path="/share-suitcase"
+                                component={ShareASuitcase}
+                            />
+                            <Route path="/suitcase/:id" component={Suitcase} />
                         </main>
                     </div>
                 </BrowserRouter>
@@ -162,6 +155,7 @@ const Menu = props => {
         </div>
     );
 };
+
 function mapStateToProps(state) {
     //console.log("App mapStateToProps", state);
     return {

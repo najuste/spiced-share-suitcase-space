@@ -138,7 +138,7 @@ class RegisterForm extends React.Component {
                 )}
                 <p>
                     Already registered?<br />
-                    <Link className="btn" to="/login">
+                    <Link className="btn small-btn" to="/login">
                         Log in!
                     </Link>
                 </p>

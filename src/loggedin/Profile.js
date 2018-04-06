@@ -3,6 +3,7 @@ import "./Profile.css";
 import React from "react";
 import ProfilePic from "./ProfilePic";
 import { ProfilePicUpload } from "./ProfilePicUpload";
+import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
 import {
@@ -30,9 +31,16 @@ class Profile extends React.Component {
         this.toggleDesc = this.toggleDesc.bind(this);
         this.handleDescSubmit = this.handleDescSubmit.bind(this);
     }
+
     componentDidMount() {
         this.props.dispatch(getLoggedInUser());
         this.props.dispatch(getUserSuitcases());
+        if (this.props.user) {
+            console.log("componentDidMount-----", this.props);
+            {
+                !this.props.user.id && window.location.replace("/login");
+            }
+        }
     }
 
     // --- subsection PIC;
@@ -140,21 +148,26 @@ class Profile extends React.Component {
                     {suitcasesOffered && (
                         <div className="trips suitcase-offered">
                             <h3>Suitcases shared</h3>
+                            <Link className="btn" to="/share-suitcase">
+                                SHARE one more SUITCASE
+                            </Link>
                             {suitcasesOffered.length &&
                                 suitcasesOffered.map(suitcase => {
                                     //check if trip_date is already behind today
                                     return (
-                                        <div className="suitcase">
-                                            <div className="from">
-                                                {suitcase.place_a_name}
+                                        <Link to={"/suitcase/" + suitcase.id}>
+                                            <div className="suitcase">
+                                                <div className="from">
+                                                    {suitcase.place_a_name}
+                                                </div>
+                                                <div className="to">
+                                                    {suitcase.place_b_name}
+                                                </div>
+                                                <div className="date italic">
+                                                    {suitcase.trip_date}
+                                                </div>
                                             </div>
-                                            <div className="to">
-                                                {suitcase.place_b_name}
-                                            </div>
-                                            <div className="date">
-                                                {suitcase.trip_date}
-                                            </div>
-                                        </div>
+                                        </Link>
                                     );
                                 })}
                         </div>
@@ -162,29 +175,36 @@ class Profile extends React.Component {
                     {suitcasesTaken && (
                         <div className="trips suitcase-taken">
                             <h3>Suitcases taken</h3>
-
+                            <Link className="btn" to="/share-suitcase">
+                                SEARCH for one more SUITCASE
+                            </Link>
                             {suitcasesTaken.length &&
                                 suitcasesTaken.map(suitcase => {
                                     //check if trip_date is already behind today
                                     return (
-                                        <div className="suitcase">
-                                            <div className="from">
-                                                {suitcase.place_a_name}
+                                        <Link to={"/suitcase/" + suitcase.id}>
+                                            <div className="suitcase">
+                                                <div className="from">
+                                                    {suitcase.place_a_name}
+                                                </div>
+                                                <div className="to">
+                                                    {suitcase.place_b_name}
+                                                </div>
+                                                <div className="date italic">
+                                                    {suitcase.trip_date}
+                                                </div>
                                             </div>
-                                            <div className="to">
-                                                {suitcase.place_b_name}
-                                            </div>
-                                            <div className="date">
-                                                {suitcase.trip_date}
-                                            </div>
-                                        </div>
+                                        </Link>
                                     );
                                 })}
                         </div>
                     )}
                 </div>
                 <div className="subsection reviews">
-                    Review block, that logged in user can leave? Sockets?
+                    <p>
+                        Review block, that logged in user can leave.. (for
+                        future)
+                    </p>
                 </div>
             </div>
         );

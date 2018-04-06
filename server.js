@@ -32,24 +32,6 @@ app.use(compression());
 app.use(morgan("dev"));
 app.use(express.static(path.resolve(__dirname, "build")));
 
-// if (!dev) {
-//     app.disable("x-powered-by");
-//     app.use(compression());
-//     app.use(morgan("combined"));
-//     app.use(express.static(path.resolve(__dirname, "build")));
-//     app.get("*", (req, res) => {
-//         res.sendFile(path.resolve(__dirname, "build", "index.html"));
-//     });
-// }
-// if (dev) {
-//     app.use(morgan("dev"));
-//     app.use(express.static(path.resolve(__dirname, "build")));
-//
-//     app.get("*", (req, res) => {
-//         res.sendFile(path.resolve(__dirname, "build", "index.html"));
-//     });
-// }
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -77,27 +59,19 @@ const uploader = multer({
 
 //---------------- routes -- to log in /register
 //routes not to access if not registered
-app.get("/profile", function(req, res) {
-    if (!req.session.loggedin) {
-        res.redirect("/login");
-    }
-});
-
-//login
-
-app.get("/login", function(req, res, next) {
-    console.log("Got inside the /login");
-    if (req.session.loggedin) {
-        res.redirect("/");
-    } else {
-        next();
-    }
-});
-// app.get("/share-suitcase", function(req, res) {
+// app.get("/profile", function(req, res) {
 //     if (!req.session.loggedin) {
 //         res.redirect("/login");
 //     }
 // });
+
+//login
+
+app.get("/share-suitcase", function(req, res) {
+    if (!req.session.loggedin) {
+        res.redirect("/login");
+    }
+});
 
 //registration
 app.post("/register", function(req, res) {
@@ -202,21 +176,32 @@ app.post("/login", function(req, res) {
 app.get("/user-data", function(req, res) {
     console.log("In /user-data route", req.session);
     if (req.session.loggedin) {
-        return db.getDataByEmail(req.session.loggedin.email).then(user => {
-            if (user.profilepic) {
-                user.profilepic = config.s3Url + user.profilepic;
-            }
-            res.json({ user });
-        });
+        return db
+            .getDataByEmail(req.session.loggedin.email)
+            .then(user => {
+                if (user.profilepic) {
+                    user.profilepic = config.s3Url + user.profilepic;
+                }
+                res.json({ user });
+            })
+            .catch(err => {
+                console.log("there is a problem,", err);
+                //testing purposes when cookies  are short term
+                res.json({});
+            });
     } else {
-        console.log("there is a problem, user is not logged in...");
-        //testing purposes when cookies  are short term
-        res.json({});
+        return res.json({});
     }
-    return db.getDataByEmail().then(user => {
-        console.log(user);
-    });
 });
+
+// app.get("/login", function(req, res, next) {
+//     console.log("Got inside the /login");
+//     if (req.session.loggedin) {
+//         res.redirect("/");
+//     } else {
+//         next();
+//     }
+// });
 
 app.get("/latest-suitcases", function(req, res) {
     console.log("Inside the latest-suitcase");
@@ -346,8 +331,15 @@ app.get("/search-suitcase", function(req, res) {
     const urlParams = url.parse(req.url);
     const query = querystring.parse(urlParams.query);
     //querystring
+
     if (query) {
+        let user_id;
         const { place_a, place_b, trip_date, size, search_radius } = query;
+        {
+            req.session.loggedin
+                ? (user_id = req.session.loggedin.id)
+                : (user_id = 0);
+        }
         console.log("Checking query passed to db", query);
         return db
             .searchForSuitcase(
@@ -356,7 +348,7 @@ app.get("/search-suitcase", function(req, res) {
                 trip_date,
                 size,
                 search_radius,
-                search_radius
+                user_id
             )
             .then(results => {
                 console.log("Results from search-suitcase", results);
@@ -392,7 +384,8 @@ app.post("/share-suitcase", function(req, res) {
             place_b,
             place_b_name,
             trip_date,
-            size
+            size,
+            description
         } = req.body.shareParams;
         return db
             .shareASuitcase(
@@ -402,7 +395,8 @@ app.post("/share-suitcase", function(req, res) {
                 place_b,
                 place_b_name,
                 trip_date,
-                size
+                size,
+                description
             )
             .then(results => {
                 console.log("Results from search-suitcase", results);
@@ -429,7 +423,13 @@ app.get("*", function(req, res) {
     console.log("In all routes:Cookies: ", req.session.loggedin);
     // if (!req.session.loggedin && req.url == "/profile") {
     //     res.redirect("/login");
+    // } else if (
+    //     (req.session.loggedin && req.url != "/login") ||
+    //     req.url != "/register"
+    // ) {
+    //     res.redirect("/login");
     // }
+
     res.sendFile(path.resolve(__dirname, "build", "index.html"));
 });
 

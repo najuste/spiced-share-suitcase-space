@@ -9,16 +9,34 @@
     border-bottom-right-radius: 25px;
 }
 
+.suitcase-owner {
+    display: flex;
+}
+.text {
+    display: block;
+    margin-right: 2em;
+}
+
 .subsection {
     margin: 1em;
     width: 100%;
     padding: 1em;
     background-color: var(--main);
+    box-shadow: 0 0 10px var(--brownish);
 }
 
 .subsection-trips {
     display: flex;
     justify-content: center;
+    margin: 1em;
+    width: 100%;
+    padding: 1em;
+    background-color: var(--main);
+    box-shadow: 0 0 10px var(--brownish);
+}
+
+.italic {
+    font-style: italic;
 }
 .trips {
     margin: 1em;
@@ -26,7 +44,7 @@
     width: 45%;
 }
 .suitcase-offered {
-    background-color: var(--blue);
+    background-color: var(--bluish2);
 }
 .suitcase-taken {
     background-color: var(--bluish);

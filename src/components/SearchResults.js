@@ -26,15 +26,15 @@ class SearchResults extends React.Component {
                                     >
                                         <div className="suitcase">
                                             <div className="from">
-                                                {suitcase.place_a_name}
+                                                {suitcase.place_a_name} >
                                             </div>
                                             <div className="to">
-                                                {suitcase.place_b_name}
+                                                > {suitcase.place_b_name}
                                             </div>
-                                            <div className="date">
+                                            <div className="date italic">
                                                 {suitcase.trip_date}
                                             </div>
-                                            <div className="size">
+                                            <div className="size italic">
                                                 {suitcase.size}
                                             </div>
                                         </div>

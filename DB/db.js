@@ -110,20 +110,22 @@ exports.searchForSuitcase = function(
     place_b,
     trip_date,
     size,
-    search_radius
+    search_radius,
+    user_id
 ) {
     //10km
     return db.any(
-        `SELECT trips.id, place_a_name, place_b_name, trip_date, size, price,
+        `SELECT trips.id as tripsid, place_a_name, place_b_name, trip_date, size, price,
         users.id, firstname, lastname, profilepic, email
         FROM trips
         JOIN users ON trips.user_id = users.id
         WHERE ST_DWithin($1, place_a, CAST($5 AS INTEGER)) AND
         ST_DWithin($2, place_b, CAST($5 AS INTEGER))
+        AND trips.user_id != $6
         AND trip_date BETWEEN CURRENT_DATE AND CAST($3 AS DATE)
         AND status is null
         AND size= CAST('small' AS TEXT)`,
-        [place_a, place_b, trip_date, size, search_radius]
+        [place_a, place_b, trip_date, size, search_radius, user_id]
     );
 };
 

@@ -37,6 +37,7 @@ class Suitcase extends React.Component {
         this.props.dispatch(
             reserveSuitcaseById(`${this.props.match.params.id}`)
         );
+        window.location.replace("/profile");
 
         //redirect
         //window.location.replace("/profile");
@@ -56,7 +57,10 @@ class Suitcase extends React.Component {
                                 lastName={suitcase.lastname}
                                 profilePic={suitcase.profilepic}
                             />
-                            <h3>{suitcase.firstName}</h3>
+                            <div className="text">
+                                <h3>{suitcase.firstname}</h3>
+                                <p className="italic">{suitcase.description}</p>
+                            </div>
                         </div>
                         <div className="suitcase">
                             <div className="from">{suitcase.place_a_name}</div>

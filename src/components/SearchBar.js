@@ -32,9 +32,11 @@ class SearchBar extends React.Component {
         this.shareASuitcase = this.shareASuitcase.bind(this);
     }
     onChangeInput(e) {
+        console.log("CHANGING INPUT", e.target.name, e.target.value);
         this.setState({
             [e.target.name]: e.target.value
         });
+        console.log("CHANGING INPUT STATE", this.state);
     }
 
     onChangeSize() {
@@ -96,6 +98,7 @@ class SearchBar extends React.Component {
             size,
             description
         } = this.state;
+        console.log("State of sharing suitase", this.state);
         geoCode(place_a_name, place_b_name).then(results => {
             // console.log("Inside shareASuitcase,", results);
             //'POINT(41.2 32.4)'
@@ -112,7 +115,8 @@ class SearchBar extends React.Component {
             //     place_b,
             //     place_b_name,
             //     trip_date,
-            //     size
+            //     size,
+            //description
             // );
             this.props.dispatch(
                 shareASuitcase({
@@ -125,6 +129,7 @@ class SearchBar extends React.Component {
                     description
                 })
             );
+            window.location.replace("/profile");
         });
         //results = geoC(this.state.from, this.state.to);
     }
@@ -198,9 +203,7 @@ class SearchBar extends React.Component {
                     <option value="average">average</option>
                     <option value="big">big</option>
                 </select>
-                {this.props.path == "/share-suitcase" ? (
-                    <div>some extra stuff</div>
-                ) : (
+                {this.props.path != "/share-suitcase" && (
                     <div className="slider">
                         <label htmlFor="search_radius">Search radius</label>
                         <input
@@ -225,32 +228,34 @@ class SearchBar extends React.Component {
                         searchForSuitcase={this.searchForSuitcase}
                     />
                 )}
+                {this.props.path == "/share-suitcase" && (
+                    <div id="description">
+                        <textarea
+                            type="text"
+                            name="description"
+                            placeholder="What's your suitcase like?"
+                            defaultValue={this.state.description}
+                            onChange={this.onChangeInput}
+                        />
+                    </div>
+                )}
             </div>
         );
     }
 }
-// {this.props.path != "/share-suitcase" && (
-//
-//         <input onChange={this.onChangeInput} type="range" min="10" max="100"
-//             value="50" name="search_radius" id="search_radius">
-//
-// )}
 
-// {this.props.path == "/share-suitcase" && (
-//     <div id="desc-edit">
-//         <p> Please submit the description of your suitcase and place available</p>
-//         <textarea
-//             type="text"
-//             defaultValue={//TODO should get here the description from the state
-//                 this.state.description}/>
-//         <button
-//             type="submit"
-//             className="btn btn-submit"
-//             onClick={this.handleDescSubmit}>
-//             Update
-//         </button>
-//     </div>
-// )}
+// <p className="notice">
+//     Please submit the description of your suitcase and
+//     place available.
+// </p>
+
+// <button
+//     type="submit"
+//     className="btn btn-submit"
+//     onClick={this.handleDescSubmit}
+// >
+//     Update
+// </button>
 
 async function geoCode(from, to) {
     const resultsFrom = geocodeByAddress(from).then(results =>
