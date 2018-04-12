@@ -69,8 +69,8 @@ exports.getLatestSuitcases = function(limit) {
 
 exports.getSuitcaseById = function(id) {
     return db.one(
-        `SELECT trips.id as tripsid, place_a_name, place_b_name, trip_date, size, price,
-    users.id, firstname, lastname, profilepic, email
+        `SELECT trips.id as tripsid, place_a_name, place_b_name, trip_date, size, price, trips.description,
+        users.id, firstname, lastname, profilepic, email
     FROM trips JOIN users ON trips.user_id = users.id
     WHERE trips.id = $1`,
         [id]
@@ -100,10 +100,9 @@ exports.shareASuitcase = function(
         [user_id, place_a, place_a_name, place_b, place_b_name, trip_date, size]
     );
 };
-
-// FORMAT
-// INSERT INTO trips (user_id, place_a, place_b, trip_date, space)
-// VALUES (1, ST_GeogFromText('POINT(31.96 -99.901)'), ST_GeogFromText('POINT(52.23 13.404)'), '2018-04-19', 'small')
+//
+//  umut id 16
+// UPDATE trips SET description = 'Have to bring bikes from our long trip. Also visiting relatives and such. So not much space in luggage, but will have space some small things' WHERE id= 11
 
 exports.searchForSuitcase = function(
     place_a,

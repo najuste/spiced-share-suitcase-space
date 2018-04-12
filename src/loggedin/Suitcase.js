@@ -58,8 +58,16 @@ class Suitcase extends React.Component {
                                 profilePic={suitcase.profilepic}
                             />
                             <div className="text">
+                                <p>Trip offered by:</p>
                                 <h3>{suitcase.firstname}</h3>
-                                <p className="italic">{suitcase.description}</p>
+                                {suitcase.description && (
+                                    <div>
+                                        <p>Trip/Suitcase Description:</p>
+                                        <p className="italic">
+                                            {suitcase.description}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="suitcase">
