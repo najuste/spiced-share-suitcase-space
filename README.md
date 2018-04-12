@@ -21,6 +21,7 @@ React & Redux, Node.js & Express.js, AWS S3, PostgreSQL & PostGIS, for geolocati
 ## How to run
 
 If you clone on your machine to start application just launch the server: type: `node server.js`.
-If any changes has been made to the code, first build it in order to run: type: `npm run build.
+If any changes has been made to the code, first build it in order to run: type: `npm run build`.
 
+.p.s.
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
