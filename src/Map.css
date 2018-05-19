@@ -1,0 +1,6 @@
+.suitcase-map {
+    width: 100%;
+    height: calc(100vh - 220px);
+    position: relative;
+    top: 20px;
+}

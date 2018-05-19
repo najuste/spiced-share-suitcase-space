@@ -9,6 +9,8 @@ import menuicon from "./img/menu-caret-down.svg";
 
 import Lost from "./Lost";
 
+import Map from "./Map";
+
 import LoginForm from "./registration/LoginForm";
 import RegisterForm from "./registration/RegisterForm";
 
@@ -123,6 +125,7 @@ class App extends Component {
                             <Route path="/register" component={RegisterForm} />
 
                             <Route path="/profile" component={Profile} />
+                            <Route path="/map" component={Map} />
 
                             <Route
                                 path="/share-suitcase"

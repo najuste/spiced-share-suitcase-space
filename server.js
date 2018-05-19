@@ -75,8 +75,6 @@ app.get("/share-suitcase", function(req, res) {
 
 //registration
 app.post("/register", function(req, res) {
-    console.log("In Route /register", req.body);
-
     const { firstname, lastname, email, password } = req.body;
     hashPassword(password)
         .then(hash => {
@@ -91,7 +89,6 @@ app.post("/register", function(req, res) {
                         lastname,
                         email
                     };
-                    console.log("Cookies: ", req.session.loggedin);
                     res.json({
                         success: true,
                         user: req.session.loggedin
@@ -100,13 +97,11 @@ app.post("/register", function(req, res) {
         })
         .catch(err => {
             if (err.code == "23505") {
-                console.log("Same email...");
                 res.json({
                     success: false,
                     errorMsg: "User with such email already registered"
                 });
             } else {
-                console.log(err, "Undefined error occured, please try again");
                 res.json({
                     success: false,
                     errorMsg: "Undefined error occured, please try again"
@@ -115,21 +110,14 @@ app.post("/register", function(req, res) {
         });
 });
 
-// app.get("/", function(req, res) {
-//     console.log("IN MAIN / route");
-// });
-
 app.post("/login", function(req, res) {
     const { email, password } = req.body;
-    console.log("Loggin route /login");
     return db
         .getDataByEmail(email)
         .then(results => {
-            console.log("results from getDataByEmail", results);
             let hashedPassword = results.password;
             return checkPassword(password, hashedPassword).then(matching => {
                 if (!matching) {
-                    console.log("Ups, the password did not match");
                     res.json({
                         success: false,
                         errorMsg:
@@ -137,7 +125,6 @@ app.post("/login", function(req, res) {
                     });
                 } else {
                     console.log("matching password !, send response");
-                    //setting cookies
                     const { id, firstname, lastname, email } = results;
                     req.session.loggedin = {
                         id,
@@ -149,7 +136,6 @@ app.post("/login", function(req, res) {
                         req.session.loggedin.profilepic =
                             config.s3Url + results.profilepic;
                     }
-                    console.log("Login cookies from res.json ", req.session);
                     res.json({
                         success: true,
                         user: req.session.loggedin
@@ -159,12 +145,10 @@ app.post("/login", function(req, res) {
         })
         .catch(err => {
             if (!err.received) {
-                // err.received code 0 - that email has been registered
-                console.log("The email has not been registered yet");
                 res.json({
                     success: false,
                     errorMsg:
-                        "The email you have entered has not been registered yet. Please check if you typed it correctly or register"
+                        "The email you have entered has not been registered yet. Please check if you have typed it correctly or follow the link at the bottom to register"
                 });
             } else {
                 console.log(err);
@@ -174,7 +158,6 @@ app.post("/login", function(req, res) {
 
 //getting user data
 app.get("/user-data", function(req, res) {
-    console.log("In /user-data route", req.session);
     if (req.session.loggedin) {
         return db
             .getDataByEmail(req.session.loggedin.email)
@@ -185,31 +168,23 @@ app.get("/user-data", function(req, res) {
                 res.json({ user });
             })
             .catch(err => {
-                console.log("there is a problem,", err);
                 //testing purposes when cookies  are short term
-                res.json({});
+                console.log("there is a problem,", err);
+                res.json({
+                    success: false,
+                    errorMsg: err
+                });
             });
     } else {
         return res.json({});
     }
 });
 
-// app.get("/login", function(req, res, next) {
-//     console.log("Got inside the /login");
-//     if (req.session.loggedin) {
-//         res.redirect("/");
-//     } else {
-//         next();
-//     }
-// });
-
 app.get("/latest-suitcases", function(req, res) {
-    console.log("Inside the latest-suitcase");
     let limitResultsTo = 10;
     return db
         .getLatestSuitcases(limitResultsTo)
         .then(results => {
-            console.log("Getting latest suitcases", results);
             results.map(item => {
                 item.trip_date = new Date(item.trip_date).toDateString();
             });
@@ -228,9 +203,7 @@ app.get("/get-suitcase/:id", function(req, res) {
                     results.profilepic = config.s3Url + results.profilepic;
                 }
 
-                //let date = new Date(results.trip_date);
                 results.trip_date = new Date(results.trip_date).toDateString();
-                console.log("Updated suitcase profilepic:", results);
                 //profile pic update url
                 // console.log("Friendship state with:", req.params.id);
                 res.json({ results });
@@ -268,7 +241,6 @@ app.post("/pic-upload", uploader.single("file"), s3.upload, (req, res) => {
         return db
             .updatePic(req.session.loggedin.id, req.file.filename)
             .then(results => {
-                console.log("Results from db", results);
                 // TODO: TO MAKE THAT s§Url just in one place, so that I don't have to update each time?
                 req.session.loggedin.profilepic =
                     config.s3Url + results.profilepic;
@@ -312,11 +284,9 @@ app.post("/desc-submit", function(req, res) {
 //// TODO: It could be two queries, for share and for space so that limit works better
 app.get("/user-suitcase", function(req, res) {
     let limitSuitcases = 10;
-    console.log("Results from /user-suitcase", req.session.loggedin.id);
     return db
         .getUserSuitcase(req.session.loggedin.id, limitSuitcases)
         .then(results => {
-            console.log("Results from /user-suitcase", results);
             res.json({
                 success: true,
                 id: req.session.loggedin.id,
@@ -327,7 +297,6 @@ app.get("/user-suitcase", function(req, res) {
 });
 
 app.get("/search-suitcase", function(req, res) {
-    console.log("Inside search-suitcase route", req.url);
     const urlParams = url.parse(req.url);
     const query = querystring.parse(urlParams.query);
     //querystring
@@ -340,7 +309,6 @@ app.get("/search-suitcase", function(req, res) {
                 ? (user_id = req.session.loggedin.id)
                 : (user_id = 0);
         }
-        console.log("Checking query passed to db", query);
         return db
             .searchForSuitcase(
                 place_a,
@@ -351,7 +319,6 @@ app.get("/search-suitcase", function(req, res) {
                 user_id
             )
             .then(results => {
-                console.log("Results from search-suitcase", results);
                 //results.trip_date = results.trip_date.toDateString();
                 results.map(item => {
                     item.trip_date = new Date(item.trip_date).toDateString();
@@ -368,14 +335,12 @@ app.get("/search-suitcase", function(req, res) {
         res.json({
             success: false,
             errorMsg:
-                "Something went wrong with your entered choises, please choose the drop down cities"
+                "Something went wrong with your entered choises, please choose the city from the drop down"
         });
     }
 });
 
 app.post("/share-suitcase", function(req, res) {
-    console.log("Inside share-suitcase route", req.body.shareParams);
-
     if (req.body.shareParams) {
         let user_id = req.session.loggedin.id;
         const {
@@ -406,7 +371,6 @@ app.post("/share-suitcase", function(req, res) {
             })
             .catch(err => console.log(err));
     } else {
-        console.log("Query failed... please type in real data");
         res.json({
             success: false,
             errorMsg:
@@ -433,7 +397,7 @@ app.get("*", function(req, res) {
     res.sendFile(path.resolve(__dirname, "build", "index.html"));
 });
 
-app.listen(process.env.PORT || 8080, () => console.log("Nieko tokio"));
+app.listen(process.env.PORT || 8080, () => console.log("Listening on 8080"));
 
 function hashPassword(plainTextPassword) {
     return new Promise(function(resolve, reject) {

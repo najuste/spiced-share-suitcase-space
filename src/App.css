@@ -292,7 +292,8 @@ a.btn {
     padding: 2em;
 }
 
-.formErrors > p {
+/* .formErrors > p, */
+p.error {
     font-style: italic;
     font-size: 0.9em;
     color: #b5696f;
@@ -327,10 +328,9 @@ input {
 #search-results .suitcase,
 #suitcase-section .suitcase,
 .trips .suitcase {
-    display: inline-flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) 100px 50px;
     background: var(--main);
-    width: 90%;
     padding: 1em;
     margin-top: 0.5em;
     box-shadow: 0 0 5px rgba(43, 43, 43, 0.1);
@@ -338,8 +338,16 @@ input {
     border-radius: 2px;
 }
 
+@media (max-width: 480px) {
+    #search-results .suitcase,
+    #suitcase-section .suitcase,
+    .trips .suitcase {
+        grid-template-columns: 1fr;
+    }
+}
+
 #search-results .suitcase:hover {
-    box-shadow: 0 0 3px var(--brownish);
+    box-shadow: 0 0 7px var(--brownish);
     cursor: pointer;
 }
 
